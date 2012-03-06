@@ -4,11 +4,11 @@ package Overlap;
 
 use strict;
 use warnings;
-use feature "state";
+use 5.010;
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT_OK = qw(OverlapMax);
+our @EXPORT_OK = qw(OverlapMax OverlapMap);
 
 ##########Subroutine##########
 
@@ -112,8 +112,109 @@ sub OverlapMax {
     push @new_array,$interval1; # push the last interval into @new_array
     # return new array according to context
     return wantarray ? @new_array : \@new_array;
+
 }
 
+#
+# Name: OverlapMap
+# Parameter: \@map_to_array (sorted already), \@map_array, (@map_to_array don't
+#            contain overlaps and @map_array (don't) contain overlaps)
+#            $seperator (nonword character) (optional),
+#            $flag_of_containing_tag (00 or 01 or 10 or 11) (optional),
+#            $flag_of_sorted (0 or 1) (focus on @map_array) (optional)
+# Default Values: $seperator = \s, $flag_of_containing_tag = 11,
+#                 $flag_of_sorted = 0
+# Return: @mapped_array (return the pointer to @mapped_array in scalar context)
+#
+# Function: Use to map a messy array to a clean index.
+#
+# Example: input (1) '3 7 !', '10 12 @', '16 20 #', '23 25 $'
+#                (2) '2 4 a', '2 7 b', '2 3 c', '4 11 d', '4 6 e', '5 9 f',
+#                    '7 10 g', '15 17 h', '18 21 i', '9 24 x', '13 14 y'
+#          output '3 4 ! a', '3 7 ! b', '4 7 ! d', '4 6 ! e', '5 7 ! f',
+#                 '10 11 @ d', '10 12 @ x', '16 20 # x', '16 17 # h', '18 20 # i',
+#                 '23 24 $ x'
+#
+sub OverlapMap {
+
+    # if in void context
+    die "OverlapMax can't in void context!\n" unless defined wantarray;
+
+    # initiate internal parameters
+    my ($out_sep, $re_sorted_map_array, @mapped_array, $read, @tmp_array,
+        $first, $second);
+
+    my $re_map_to_array = shift; # $re_map_to_array: \@map_to_array
+    my $re_map_array = shift; # $re_map_array: \@map_array
+
+    # check optional parameters
+    # $sep: $seperator, $flag1: $flag_of_containing_tag, $flag2: $flag_of_sorted
+    my ($sep, $flag1, $flag2) = _parameter_check('OverlapMax', 3, \@_,
+                                [qr(\W), qr((0|1){1,2}), qr(0|1)],
+                                ['\s', '11', '0']);
+
+    # set output_seperator
+    if ($sep eq '\s') {
+        $out_sep = ' ';
+    }
+    else {
+        $out_sep = $sep;
+    }
+
+    unless ($flag2) { # sort @map_array by its first index if not sorted
+        $re_sorted_map_array = _sort($re_map_array, $sep, 1);
+    }
+    else { # if sorted
+        $re_sorted_map_array = $re_map_array;
+    }
+
+    for my $interval (@$re_map_to_array) {
+        LABEL:$read = shift @$re_sorted_map_array;
+        unless (defined $read) {
+            if (defined $tmp_array[0]) {
+                unshift @$re_sorted_map_array,@tmp_array;
+                @tmp_array = ();
+                goto LABEL;
+            }
+            else { last }
+        }
+        if ((split /$sep/,$read)[0] >= (split /$sep/,$interval)[1]) {
+            unshift @$re_sorted_map_array,$read;
+            unshift @$re_sorted_map_array,@tmp_array if defined $tmp_array[0];
+            @tmp_array = ();
+            next;
+        }
+        $first = (split /$sep/,$read)[0] > (split /$sep/,$interval)[0] ?
+                (split /$sep/,$read)[0] : (split /$sep/,$interval)[0];
+        $second = (split /$sep/,$read)[1] < (split /$sep/,$interval)[1] ?
+                (split /$sep/,$read)[1] : (split /$sep/,$interval)[1];
+        if($first >= $second) {
+            goto LABEL;
+        }
+        my $tag;
+        given ($flag1) {
+            when (00) {$tag = ''; break}
+            when (01) {$tag = $out_sep . (split /$sep/,$read)[2]; break}
+            when (10) {$tag = $out_sep . (split /$sep/,$interval)[2]; break}
+            when (11) {
+                $tag = $out_sep . (split /$sep/,$interval)[2] . $out_sep .
+                       (split /$sep/,$read)[2];
+                break;
+            }
+        }
+        my $tem = $first . $out_sep . $second . $tag;
+        push @mapped_array,$tem;
+        if ($second == (split /$sep/,$interval)[1]) {
+            if ($second != (split /$sep/,$read)[1]) {
+                my $tmp = $second . $out_sep . (split /$sep/,$read,2)[-1];
+                push @tmp_array,$tmp;
+            }
+        }
+        goto LABEL;
+    }
+    # return new array according to context
+    return wantarray ? @mapped_array : \@mapped_array;
+}
 ##########Internal Subroutine##########
 
 #
