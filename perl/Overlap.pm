@@ -45,8 +45,7 @@ sub OverlapMax {
     # check optional parameters
     # $sep: $seperator, $flag1: $flag_of_containing_tag, $flag2: $flag_of_sorted
     my ($sep, $flag1, $flag2) = _parameter_check('OverlapMax', 3, \@_,
-                                [qr(\W), qr(0|1), qr(0|1)],
-                                ['\s', 0, 0]);
+                                [qr(\W), qr(0|1), qr(0|1)], ['\s', 0, 0]);
 
     # set output_seperator
     if ($sep eq '\s') {
@@ -63,7 +62,9 @@ sub OverlapMax {
     elsif (ref $re_old_array eq 'SCALAR') {
         # if $old_array is undef, return last interval
         unless (defined $$re_old_array) {
-            return $interval1;
+            my $tmp = $interval1;
+            $interval1 = undef; # clear $interval1 for next usage
+            return $tmp;
         }
         $is_array = 0;
         $status = 'uncomplete'; # initiate status
