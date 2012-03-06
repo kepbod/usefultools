@@ -55,7 +55,7 @@ sub OverlapMax {
         $out_sep = $sep;
     }
 
-    # check first parameter
+    # check the first parameter
     if (ref $re_old_array eq 'ARRAY') {
         $is_array = 1;
     }
