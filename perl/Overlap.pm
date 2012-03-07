@@ -255,10 +255,10 @@ sub OverlapMerge {
         my $second = (split /$sep/,$interval1)[1] < (split /$sep/,$interval2)[1] ?
                 (split /$sep/,$interval1)[1] : (split /$sep/,$interval2)[1];
         if ((split /$sep/,$interval1)[1] == $second) {
-            $i++;
+            $i++; # point to next element
         }
         if ((split /$sep/,$interval2)[1] == $second) {
-            $j++;
+            $j++; # point to next element
         }
         if($first < $second) {
             my $tag;
@@ -275,13 +275,13 @@ sub OverlapMerge {
             my $tmp = $first . $out_sep . $second . $tag;
             push @merged_array,$tmp;
         }
-        if ($i > $#{$re_array1}) {
+        if ($i > $#{$re_array1}) { # if @array1 over
             if (defined $$re_array2[$j]) {
                 push @merged_array,@{$re_array2}[$j..$#{$re_array2}];
                 last;
             }
         }
-        if ($j > $#{$re_array2}) {
+        if ($j > $#{$re_array2}) { # if @array2 over
             if (defined $$re_array1[$i]) {
                 push @merged_array,@{$re_array1}[$i..$#{$re_array1}];
                 last;
