@@ -48,12 +48,7 @@ sub OverlapMax {
                                 [qr(\W), qr(0|1), qr(0|1)], ['\s', 0, 0]);
 
     # set output_seperator
-    if ($sep eq '\s') {
-        $out_sep = ' ';
-    }
-    else {
-        $out_sep = $sep;
-    }
+    _set_sep(\$sep, \$out_sep);
 
     # check the first parameter
     if (ref $re_old_array eq 'ARRAY') {
@@ -154,12 +149,7 @@ sub OverlapMap {
                                 ['\s', '11', '0']);
 
     # set output_seperator
-    if ($sep eq '\s') {
-        $out_sep = ' ';
-    }
-    else {
-        $out_sep = $sep;
-    }
+    _set_sep(\$sep, \$out_sep);
 
     unless ($flag2) { # sort @map_array by its first index if not sorted
         $re_sorted_map_array = _sort($re_map_array, $sep, 1);
@@ -259,6 +249,21 @@ sub _sort {
         die "Errors occure when sorting!\n";
     }
     return \@sorted_array;
+}
+
+#
+# Set seperator
+#
+sub _set_sep {
+    my ($re_sep, $re_out_sep) = @_;
+    $$re_out_sep = $$re_sep;
+    if ($$re_out_sep eq '\s') {
+        $$re_out_sep = ' ';
+    }
+    my %tra_dic = ('.' => '\.', '+' => '\+', '?' => '\?', '*' => '\*', '|' => '\|');
+    if (exists $tra_dic{$$re_sep}) {
+        $$re_sep = $tra_dic{$$re_sep};
+    }
 }
 
 1;
