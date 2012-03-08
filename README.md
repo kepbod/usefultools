@@ -1,18 +1,18 @@
-#Useful Tools
+# Useful Tools
 
 *Some useful tools and modules used in my routine work and analysis*
 
-##Install##
+## Installation
 
 Input `git clone http://github.com/kepbod/usefultools.git /path/to/usefultools` on your terminal.  
 PS: '/path/to/usefultools' is a random pathway you like.
 
-##File Structure##
+## File Structure
 
 * tools - Useful Tools
 * perl - Perl Modules
 
-##Tools##
+## Tools
 
 >
 > Usage: Add '/path/to/usefultools/tools' to your $PATH.
@@ -21,7 +21,7 @@ PS: '/path/to/usefultools' is a random pathway you like.
 * [gitupdate.pl](https://github.com/kepbod/usefultools/blob/master/tools/gitupdate.pl): Update git repository automatically  
     See `gitupdate.pl --help` for more details
 
-##Modules##
+## Modules
 
 >
 > *For Perl Modules*  
@@ -33,7 +33,7 @@ PS: '/path/to/usefultools' is a random pathway you like.
 * [Overlap.pm](https://github.com/kepbod/usefultools/blob/master/perl/Overlap.pm): Used to cope with overlaps between arrays  
     Functions: OverlapMax, OverlapMap, OverlapMerge
 
-##Notice##
+## Notice
 
 **All these tools and Modules are created and maintained by myself, so if there are
 some bugs and questions, please feel free to let me know. Thanks!**
