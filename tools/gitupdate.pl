@@ -44,9 +44,10 @@ help if $opts{h} or not %opts or not exists $opts{p};
 
 # check pathway
 $opts{p} =~ s/([^\/]$)/$1\//;
--d $opts{p} or die "Your pathway is wrong! Please check!\n";
+-d $opts{p} or print "Your pathway is wrong! Please check!\n" and exit;
 -d $opts{p}."/.git/"
-    or die "Your pathway doesn't point to a git repository! Please check!\n";
+    or print "Your pathway doesn't point to a git repository! Please check!\n"
+    and exit;
 
 # check message
 unless (exists $opts{m}) {
@@ -56,15 +57,19 @@ unless (exists $opts{m}) {
 
 # check git
 system("git --version") == 0
-    or die "Can't find 'git'! Please check if it's installed correctly!\n";
+    or print "Can't find 'git'! Please check if it's installed correctly!\n"
+    and exit;
 
 # run commands
 my $pwd = `pwd`;
-chdir $opts{p} or die "Can't open $opts{p}! Please check!\n";
+chdir $opts{p} or print "Can't open $opts{p}! Please check!\n" and exit;
 system("git add .") == 0
-    or die "Can't run 'git add'! Please see 'git add -h' for more details!\n";
+    or print "Can't run 'git add'! Please see 'git add -h' for more details!\n"
+    and exit;
 system("git commit -a -m '$opts{m}'") == 0
-    or die "Can't run 'git commit'! Please see 'git commit -h' for more details!\n";
+    or print "Can't run 'git commit'! Please see 'git commit -h' for more details!\n"
+    and exit;
 system("git push origin master") == 0
-    or die "Can't run 'git push'! Please see 'git push -h' for more details!\n";
+    or print "Can't run 'git push'! Please see 'git push -h' for more details!\n"
+    and exit;
 chdir $pwd;
