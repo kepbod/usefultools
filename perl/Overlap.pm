@@ -2,6 +2,9 @@
 
 package Overlap;
 
+our $AUTHOR = "Xiao'ou Zhang";
+our $VERSION = 0.1.0;
+
 use strict;
 use warnings;
 use 5.010;

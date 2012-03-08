@@ -9,16 +9,18 @@ PS: '/path/to/usefultools' is a random pathway you like.
 
 ##File Structure##
 
+* tools - Useful Tools
 * perl - Perl Modules
 
 ##Tools##
 
+* [gitupdate.pl](https://github.com/kepbod/usefultools/blob/master/tools/gitupdate.pl): Update git repository automatically
 
+    See `gitupdate.pl --help` for more details
 
 ##Modules##
 
-**Perl**
-
+> *For Perl Modules*  
 > Usage: Add `use lib "/path/to/usefultools/perl/";` and `use ModuleName
 > qw(Function..)` to your perl scripts.  
 > PS: '/path/to/usefultools/perl/', 'ModuleName' and 'Function' are set according to
