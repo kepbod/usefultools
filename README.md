@@ -24,7 +24,7 @@ PS: '/path/to/usefultools' is a random pathway you like.
 > PS: '/path/to/usefultools/perl/', 'ModuleName' and 'Function' are set according to
 > your needs.
 
-* [Overlap.pm](https://github.com/kepbod/usefultools/blob/master/perl/Overlap.pm): Use to cope with overlaps between arrays  
+* [Overlap.pm](https://github.com/kepbod/usefultools/blob/master/perl/Overlap.pm): Used to cope with overlaps between arrays  
     (Functions: OverlapMax, OverlapMap, OverlapMerge)
 
 ##Notice##

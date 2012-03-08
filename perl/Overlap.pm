@@ -22,7 +22,7 @@ our @EXPORT_OK = qw(OverlapMax OverlapMap OverlapMerge);
 # Return: @new_array (return the pointer to @new_array in scalar context)
 #         $interval (if the first parameter is \$old_array)
 #
-# Function: Use to extract the max overlaps from this array.
+# Function: Used to extract the max overlaps from this array.
 #
 # Example: input '2 5', '3 7', '10 16', '12 13', '6 8'
 #          output '2 8', '10 16'
@@ -125,7 +125,7 @@ sub OverlapMax {
 #                 $flag_of_sorted = 0
 # Return: @mapped_array (return the pointer to @mapped_array in scalar context)
 #
-# Function: Use to map a messy array to a clean index.
+# Function: Used to map a messy array to a clean index.
 #
 # Example: input (1) '3 7 !', '10 12 @', '16 20 #', '23 25 $'
 #                (2) '2 4 a', '2 7 b', '2 3 c', '4 11 d', '4 6 e', '5 9 f',
@@ -222,7 +222,7 @@ sub OverlapMap {
 # Default Values: $seperator = \s, $flag_of_containing_tag = 00,
 # Return: @merged_array (return the pointer to @merged_array in scalar context)
 #
-# Function: Use to merge two index.
+# Function: Used to merge two index.
 #
 # Example: input (1) '2 5', '7 9', '11 12', '15 17', '19 25', '27 30'
 #                (2) '3 6', '8 12', '14 17'
