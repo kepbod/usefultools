@@ -26,7 +26,7 @@ PS: '/path/to/usefultools' is a random pathway you like.
 >
 > *For Perl Modules*  
 > Usage: Add `use lib "/path/to/usefultools/perl/";` and `use ModuleName
-> qw(Functions...)` to your perl scripts.  
+> qw(Functions...);` to your perl scripts.  
 > PS: 'ModuleName' and 'Functions' are set according to your needs.
 >
 
@@ -35,5 +35,4 @@ PS: '/path/to/usefultools' is a random pathway you like.
 
 ## Notice
 
-**All these tools and Modules are created and maintained by myself, so if there are
-some bugs and questions, please feel free to let me know. Thanks!**
+**All these tools and Modules are created and maintained by myself, so if there are some bugs and questions, please feel free to let me know. Thanks!**
