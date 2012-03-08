@@ -18,7 +18,7 @@ PS: '/path/to/usefultools' is a random pathway you like.
 > Usage: Add '/path/to/usefultools/tools' to your $PATH.
 >
 
-* [gitupdate.pl](https://github.com/kepbod/usefultools/blob/master/tools/gitupdate.pl): Update git repository automatically
+* [gitupdate.pl](https://github.com/kepbod/usefultools/blob/master/tools/gitupdate.pl): Update git repository automatically  
     See `gitupdate.pl --help` for more details
 
 ##Modules##
