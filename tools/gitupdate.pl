@@ -8,6 +8,7 @@ our $VERSION = "0.1.0";
 use Getopt::Std;
 $Getopt::Std::STANDARD_HELP_VERSION = 1;
 
+# set essential messages
 sub HELP_MESSAGE {
     print <<HELP;
 Usage: gitupdate.pl -p <path> [-m <message>]
@@ -36,23 +37,28 @@ SIMPLE_HELP
     exit;
 }
 
+# get options and check
 my %opts;
 getopts('hp:m:', \%opts) or help;
 help if $opts{h} or not %opts or not exists $opts{p};
 
+# check pathway
 $opts{p} =~ s/([^\/]$)/$1\//;
 -d $opts{p} or die "Your pathway is wrong! Please check!\n";
 -d $opts{p}."/.git/"
     or die "Your pathway doesn't point to a git repository! Please check!\n";
 
+# check message
 unless (exists $opts{m}) {
     $opts{p} =~ /([^\/]+)\/$/;
     $opts{m} = "Update $1";
 }
 
+# check git
 system("git --version") == 0
     or die "Can't find 'git'! Please check if it's installed correctly";
 
+# run commands
 my $pwd = `pwd`;
 chdir $opts{p} or die "Can't open $opts{p}! Please check!\n";
 system("git add .") == 0

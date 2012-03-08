@@ -1,6 +1,6 @@
 #Useful Tools
 
-*Some useful tools used in my routine work and analysis*
+*Some useful tools and modules used in my routine work and analysis*
 
 ##Install##
 
@@ -14,20 +14,24 @@ PS: '/path/to/usefultools' is a random pathway you like.
 
 ##Tools##
 
-* [gitupdate.pl](https://github.com/kepbod/usefultools/blob/master/tools/gitupdate.pl): Update git repository automatically
+>
+> Usage: Add '/path/to/usefultools/tools' to your $PATH.
+>
 
+* [gitupdate.pl](https://github.com/kepbod/usefultools/blob/master/tools/gitupdate.pl): Update git repository automatically
     See `gitupdate.pl --help` for more details
 
 ##Modules##
 
+>
 > *For Perl Modules*  
 > Usage: Add `use lib "/path/to/usefultools/perl/";` and `use ModuleName
-> qw(Function..)` to your perl scripts.  
-> PS: '/path/to/usefultools/perl/', 'ModuleName' and 'Function' are set according to
-> your needs.
+> qw(Functions...)` to your perl scripts.  
+> PS: 'ModuleName' and 'Functions' are set according to your needs.
+>
 
 * [Overlap.pm](https://github.com/kepbod/usefultools/blob/master/perl/Overlap.pm): Used to cope with overlaps between arrays  
-    (Functions: OverlapMax, OverlapMap, OverlapMerge)
+    Functions: OverlapMax, OverlapMap, OverlapMerge
 
 ##Notice##
 
