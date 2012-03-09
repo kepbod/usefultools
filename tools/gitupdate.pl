@@ -18,9 +18,7 @@ Notice: 1. If the argument after '-p' is a folder name, the current working
            directory will be added by default.
         2. If there is no '-m' argument, 'folder name' will be extracted from
            your pathway used for the default message.
-        3. If message is splited by white spaces, please use quotation marks to
-           indicate them.
-        4. More help about git, please see 'git' for more details.
+        3. More help about git, please see 'git' for more details.
 HELP
 }
 sub VERSION_MESSAGE {
@@ -39,8 +37,8 @@ SIMPLE_HELP
 
 # get options and check
 my %opts;
-getopts('hp:m:', \%opts) or help;
-help if $opts{h} or not %opts or not exists $opts{p};
+getopts('hp:m:', \%opts) or help();
+help() if $opts{h} or not %opts or not exists $opts{p};
 
 # check pathway
 $opts{p} =~ s/([^\/]$)/$1\//;
@@ -67,4 +65,3 @@ system("git commit -a -m '$opts{m}'") == 0
     or die "Can't run 'git commit'! Please see 'git commit -h' for more details!\n";
 system("git push origin master") == 0
     or die "Can't run 'git push'! Please see 'git push -h' for more details!\n";
-chdir $pwd;
