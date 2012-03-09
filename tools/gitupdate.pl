@@ -2,6 +2,11 @@
 use strict;
 use warnings;
 
+#
+# Program Name: gitupdate.pl
+# Function: Update git repository automatically.
+#
+
 our $AUTHOR = "Xiao'ou Zhang";
 our $VERSION = "0.1.0";
 
@@ -30,7 +35,7 @@ VERSION
 sub help {
     print <<SIMPLE_HELP;
 Usage: gitupdate.pl -p <path> [-m <message>]
-See 'gitupdate --help' for more details.
+See 'gitupdate.pl --help' for more details.
 SIMPLE_HELP
     exit;
 }

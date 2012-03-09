@@ -2,6 +2,11 @@
 use strict;
 use warnings;
 
+#
+# Program Name: autopm.pl
+# Function: Creat perl module automatically.
+#
+
 our $AUTHOR = "Xiao'ou Zhang";
 our $VERSION = "0.1.0";
 
@@ -38,31 +43,34 @@ sub help {
     print <<SIMPLE_HELP;
 Usage: autopm.pl -n <name> [-p <path>] [-v <version>] [-a <author>]
                  [-f <function names>] [-i <internal function names>]
-See 'autopm --help' for more details.
+See 'autopm.pl --help' for more details.
 SIMPLE_HELP
     exit;
 }
 
+# get options and check
 my %opts;
 getopts('hn:p:v:a:f:i:', \%opts) or help();
-unless (%opts) {
+unless (%opts) { # no arguments, turn on interactive mode
     interactive();
 }
 elsif ($opts{h} or not exists $opts{n}) {
     help();
 }
 
-$opts{v} = '0.1.0' unless exists $opts{v} and $opts{v} ne '';
-if ($opts{v} !~ /\d\.\d\.\d/) {
+$opts{v} = '0.1.0' unless exists $opts{v} and $opts{v} ne ''; # set version
+if ($opts{v} !~ /\d\.\d\.\d/) { # check version
     $opts{v} = '0.1.0';
 }
-$opts{a} = $ENV{USER} unless exists $opts{a} and $opts{a} ne '';
+$opts{a} = $ENV{USER} unless exists $opts{a} and $opts{a} ne ''; # set author
 
+# set and check pathway
 $opts{p} =`pwd` unless exists $opts{p} and $opts{p} ne '';
 -d $opts{p} and -w $opts{p}
     or die "Your pathway is wrong or no write permission! Please check!\n";
 $opts{p} =~ s/([^\/]$)/$1\//;
 
+# write module template
 open my $f,">","$opts{p}$opts{n}.pm" or die "Can't creat perl module file!\n";
 writeheader();
 print $f "##########Subroutine##########\n\n";
@@ -77,6 +85,7 @@ print $f "1;";
 
 ##########Subroutine##########
 
+# interactive mode
 sub interactive {
     while (1) {
         print "Please input module name:\n";
@@ -103,6 +112,7 @@ sub interactive {
     chomp($opts{i} = <STDIN>);
 }
 
+# header template
 sub writeheader {
     my $fn = '';
     $fn = join " ",(split /,/,$opts{f}) if $opts{f};
@@ -128,6 +138,7 @@ our \@EXPORT_OK = qw($fn);
 HEADER
 }
 
+# function template
 sub writefunction {
     print $f <<FUNCTION;
 #
@@ -149,6 +160,7 @@ sub $_[0] {
 FUNCTION
 }
 
+# internal function template
 sub writeinternalfunction {
     print $f <<INTERNAL_FUNCTION;
 #

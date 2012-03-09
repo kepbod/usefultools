@@ -15,6 +15,8 @@ PS: '/path/to/usefultools' is a random pathway you like.
 
 * [gitupdate.pl](https://github.com/kepbod/usefultools/blob/master/tools/gitupdate.pl): Update git repository automatically  
     See `gitupdate.pl --help` for more details
+* [autopm.pl](https://github.com/kepbod/usefultools/blob/master/tools/autopm.pl): Creat perl module automatically  
+    See `autopm.pl --help` for more details
 
 ## Notice
 
