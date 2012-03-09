@@ -63,6 +63,7 @@ if ($opts{v} !~ /\d\.\d\.\d/) { # check version
     $opts{v} = '0.1.0';
 }
 $opts{a} = $ENV{USER} unless exists $opts{a} and $opts{a} ne ''; # set author
+$opts{a} = '' unless defined $opts{a}; # if no $ENV{USER}
 
 # set and check pathway
 $opts{p} =`pwd` unless exists $opts{p} and $opts{p} ne '';
