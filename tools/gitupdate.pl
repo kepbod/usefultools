@@ -66,7 +66,7 @@ my $pwd = `pwd`;
 chdir $opts{p} or die "Can't open $opts{p}! Please check!\n";
 system("git add .") == 0
     or die "Can't run 'git add'! Please see 'git add -h' for more details!\n";
-system("git commit -a -m '$opts{m}'") == 0
+system("git commit -m '$opts{m}'") == 0
     or die "Can't run 'git commit'! Please see 'git commit -h' for more details!\n";
 system("git push origin master") == 0
     or die "Can't run 'git push'! Please see 'git push -h' for more details!\n";
