@@ -58,6 +58,7 @@ elsif ($opts{h} or not exists $opts{n}) {
     help();
 }
 
+# check and set version and author
 $opts{v} = '0.1.0' unless exists $opts{v} and $opts{v} ne ''; # set version
 if ($opts{v} !~ /\d\.\d\.\d/) { # check version
     $opts{v} = '0.1.0';
@@ -72,29 +73,32 @@ $opts{p} =`pwd` unless exists $opts{p} and $opts{p} ne '';
 $opts{p} =~ s/([^\/]$)/$1\//;
 
 # write module template
-open my $f,">","$opts{p}$opts{n}.pm" or die "Can't creat perl module file!\n";
-writeheader();
+open my $f,">","$opts{p}$opts{n}.pm" or die "Can't creat $opts{p}$opts{n}.pm!\n";
+writeheader(); # write header
 print $f "##########Subroutine##########\n\n";
-if ($opts{f}) {
+if ($opts{f}) { # write function
     writefunction($_) for split /,/,$opts{f};
 }
 print $f "##########Internal Subroutine##########\n\n";
-if ($opts{i}) {
+if ($opts{i}) { # write internal function
     writeinternalfunction($_) for split /,/,$opts{i};
 }
 print $f "1;";
+close $f;
 
 ##########Subroutine##########
 
-# interactive mode
+#
+# Function: Interactive mode.
+#
 sub interactive {
-    while (1) {
+    while (1) { # input module name
         print "Please input module name:\n";
         chomp($opts{n} = <STDIN>);
         last if $opts{n} ne '';
-        print "Module cann't be absent!\n"
+        print "Module name can't be absent!\n"
     }
-    while (1) {
+    while (1) { # input module pathway
         print "Please input module pathway:\n";
         chomp($opts{p} = <STDIN>);
         chomp($opts{p} = `pwd`) if $opts{p} eq '';
@@ -103,19 +107,25 @@ sub interactive {
         }
         print "Your pathway is wrong or no write permission!\n";
     }
+    # input module version
     print "Please input module version:\n";
     chomp($opts{v} = <STDIN>);
+    # input module author
     print "Please input module author:\n";
     chomp($opts{a} = <STDIN>);
+    # input module function names
     print "Please input module function names (seperated by commas):\n";
     chomp($opts{f} = <STDIN>);
+    # input module internal function names
     print "Please input module internal function names (seperated by commas):\n";
     chomp($opts{i} = <STDIN>);
 }
 
-# header template
+#
+# Function: Header template.
+#
 sub writeheader {
-    my $fn = '';
+    my $fn = ''; # function name
     $fn = join " ",(split /,/,$opts{f}) if $opts{f};
     print $f <<HEADER;
 #!/usr/bin/perl
@@ -139,7 +149,9 @@ our \@EXPORT_OK = qw($fn);
 HEADER
 }
 
-# function template
+#
+# Function: Function template.
+#
 sub writefunction {
     print $f <<FUNCTION;
 #
@@ -161,7 +173,9 @@ sub $_[0] {
 FUNCTION
 }
 
-# internal function template
+#
+# Function: Internal function template.
+#
 sub writeinternalfunction {
     print $f <<INTERNAL_FUNCTION;
 #
