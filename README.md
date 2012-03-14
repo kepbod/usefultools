@@ -9,7 +9,7 @@ PS: '/path/to/usefultools' is a random pathway you like.
 
 ## Usage
 
-> Add '/path/to/usefultools/tools' to your $PATH.
+Add '/path/to/usefultools/tools' to your $PATH.
 
 ## Tools
 
@@ -17,6 +17,8 @@ PS: '/path/to/usefultools' is a random pathway you like.
     See `gitupdate.pl --help` for more details
 * [autopm.pl](https://github.com/kepbod/usefultools/blob/master/tools/autopm.pl): Creat perl module automatically  
     See `autopm.pl --help` for more details
+* [autopl.pl](https://github.com/kepbod/usefultools/blob/master/tools/autopl.pl): reat perl file with simple options automatically  
+    See `autopl.pl --help` for more details
 
 ## Notice
 
