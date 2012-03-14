@@ -17,7 +17,7 @@ Add '/path/to/usefultools/tools' to your $PATH.
     See `gitupdate.pl --help` for more details
 * [autopm.pl](https://github.com/kepbod/usefultools/blob/master/tools/autopm.pl): Creat perl module automatically  
     See `autopm.pl --help` for more details
-* [autopl.pl](https://github.com/kepbod/usefultools/blob/master/tools/autopl.pl): reat perl file with simple options automatically  
+* [autopl.pl](https://github.com/kepbod/usefultools/blob/master/tools/autopl.pl): Creat perl file with simple options automatically  
     See `autopl.pl --help` for more details
 
 ## Notice
