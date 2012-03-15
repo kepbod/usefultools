@@ -176,7 +176,7 @@ sub writefile {
             $p2 .= $_;
         }
     }
-    $usage_p .= "[-$p1] ";
+    $usage_p .= "[-$p1] " if $p1 ne '';
     for (split //,$p2) {
         $usage_p .= "[-$_ <>] " unless /\$/;
     }
