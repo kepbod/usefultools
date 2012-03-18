@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Cwd;
 
 #
 # Program Name: autopm.pl
@@ -67,7 +68,7 @@ $opts{a} = $ENV{USER} unless exists $opts{a} and $opts{a} ne ''; # set author
 $opts{a} = '' unless defined $opts{a}; # if no $ENV{USER}
 
 # set and check pathway
-$opts{p} =`pwd` unless exists $opts{p} and $opts{p} ne '';
+$opts{p} = getpwd() unless exists $opts{p} and $opts{p} ne '';
 -d $opts{p} and -w $opts{p}
     or die "Your pathway is wrong or no write permission! Please check!\n";
 $opts{p} =~ s/([^\/]$)/$1\//;
@@ -101,7 +102,7 @@ sub interactive {
     while (1) { # input module pathway
         print "Please input module pathway:\n";
         chomp($opts{p} = <STDIN>);
-        chomp($opts{p} = `pwd`) if $opts{p} eq '';
+        $opts{p} = getcwd() if $opts{p} eq '';
         if (-d $opts{p} and -w $opts{p}) {
             last;
         }

@@ -62,7 +62,6 @@ system("git --version") == 0
     or die "Can't find 'git'! Please check if it's installed correctly!\n";
 
 # run commands
-my $pwd = `pwd`;
 chdir $opts{p} or die "Can't open $opts{p}! Please check!\n";
 # git add
 system("git add .") == 0

@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Cwd;
 
 #
 # Program Name: autopl.pl
@@ -78,7 +79,7 @@ sub interactive {
     while (1) { # input file pathway
         print "Please input perl file pathway:\n";
         chomp($opts{p} = <STDIN>);
-        chomp($opts{p} = `pwd`) if $opts{p} eq '';
+        $opts{p} = getcwd() if $opts{p} eq '';
         if (-d $opts{p} and -w $opts{p}) {
             last;
         }
