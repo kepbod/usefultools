@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Carp;
 
 #
 # Program Name: gitupdate.pl
@@ -47,9 +48,9 @@ help() if $opts{h} or not %opts or not exists $opts{p};
 
 # check pathway
 $opts{p} =~ s/([^\/]$)/$1\//;
--d $opts{p} or die "Your pathway is wrong! Please check!\n";
+-d $opts{p} or croak "Your pathway is wrong! Please check!\n";
 -d $opts{p}."/.git/"
-    or die "Your pathway doesn't point to a git repository! Please check!\n";
+    or croak "Your pathway doesn't point to a git repository! Please check!\n";
 
 # check message
 unless (exists $opts{m}) {
@@ -59,16 +60,16 @@ unless (exists $opts{m}) {
 
 # check git
 system("git --version") == 0
-    or die "Can't find 'git'! Please check if it's installed correctly!\n";
+    or croak "Can't find 'git'! Please check if it's installed correctly!\n";
 
 # run commands
-chdir $opts{p} or die "Can't open $opts{p}! Please check!\n";
+chdir $opts{p} or croak "Can't open $opts{p}! Please check!\n";
 # git add
 system("git add .") == 0
-    or die "Can't run 'git add'! Please see 'git add -h' for more details!\n";
+    or croak "Can't run 'git add'! Please see 'git add -h' for more details!\n";
 # git commit
 system("git commit -m '$opts{m}'") == 0
-    or die "Can't run 'git commit'! Please see 'git commit -h' for more details!\n";
+    or croak "Can't run 'git commit'! Please see 'git commit -h' for more details!\n";
 # git push
 system("git push origin master") == 0
-    or die "Can't run 'git push'! Please see 'git push -h' for more details!\n";
+    or croak "Can't run 'git push'! Please see 'git push -h' for more details!\n";

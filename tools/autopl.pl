@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Carp;
 use Cwd;
 
 #
@@ -59,7 +60,7 @@ $opts{a} = '' unless defined $opts{a}; # if no $ENV{USER}
 # modify pathway
 $opts{p} =~ s/([^\/]$)/$1\//;
 
-open my $f,">","$opts{p}$opts{n}.pl" or die "Can't creat $opts{p}$opts{n}.pl!\n";
+open my $f,">","$opts{p}$opts{n}.pl" or croak "Can't creat $opts{p}$opts{n}.pl!\n";
 writefile(); # write file
 close $f;
 
@@ -189,6 +190,7 @@ sub writefile {
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Carp;
 
 #
 # Program Name: $opts{n}.pl

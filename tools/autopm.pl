@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Carp;
 use Cwd;
 
 #
@@ -70,11 +71,11 @@ $opts{a} = '' unless defined $opts{a}; # if no $ENV{USER}
 # set and check pathway
 $opts{p} = getpwd() unless exists $opts{p} and $opts{p} ne '';
 -d $opts{p} and -w $opts{p}
-    or die "Your pathway is wrong or no write permission! Please check!\n";
+    or croak "Your pathway is wrong or no write permission! Please check!\n";
 $opts{p} =~ s/([^\/]$)/$1\//;
 
 # write module template
-open my $f,">","$opts{p}$opts{n}.pm" or die "Can't creat $opts{p}$opts{n}.pm!\n";
+open my $f,">","$opts{p}$opts{n}.pm" or croak "Can't creat $opts{p}$opts{n}.pm!\n";
 writeheader(); # write header
 print $f "##########Subroutine##########\n\n";
 if ($opts{f}) { # write function
@@ -129,16 +130,16 @@ sub writeheader {
     my $fn = ''; # function name
     $fn = join " ",(split /,/,$opts{f}) if $opts{f};
     print $f <<HEADER;
-#!/usr/bin/perl
-use strict;
-use warnings;
+package $opts{n};
 
 #
 # Module Name: $opts{n}.pm
 # Function:
 #
 
-package $opts{n};
+use strict;
+use warnings;
+use Carp;
 
 our \$AUTHOR = "$opts{a}";
 our \$VERSION = "$opts{v}";
