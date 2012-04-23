@@ -55,7 +55,7 @@ if ($opts{v} !~ /\d\.\d\.\d/) { # check version
     $opts{v} = '0.1.0';
 }
 $opts{a} = $ENV{USER} if $opts{a} eq ''; # set author
-$opts{a} = '' unless defined $opts{a}; # if no $ENV{USER}
+$opts{a} = '' if not defined $opts{a}; # if no $ENV{USER}
 
 # modify pathway
 $opts{p} =~ s/([^\/]$)/$1\//;
@@ -238,14 +238,8 @@ HEADER
 #
 sub exist_essential_parameter {
     my \@essential_parameter = qw( $sub_p);
-    my \$flag = 1;
-    for (\@essential_parameter) {
-        unless (exists \$opts{\$_}) {
-            \$flag = 0;
-            last;
-        }
-    }
-    return \$flag;
+    exists \$opts{$_} || return 0 for \@essential_parameter;
+    return 1;
 }
 BODY
 }
