@@ -65,7 +65,7 @@ system("git --version") == 0
 # run commands
 chdir $opts{p} or croak "Can't open $opts{p}! Please check!\n";
 # git add
-system("git add .") == 0
+system("git add . && git add -u") == 0
     or croak "Can't run 'git add'! Please see 'git add -h' for more details!\n";
 # git commit
 system("git commit -m '$opts{m}'") == 0
