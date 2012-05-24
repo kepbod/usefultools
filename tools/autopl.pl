@@ -238,7 +238,7 @@ HEADER
 #
 sub exist_essential_parameter {
     my \@essential_parameter = qw( $sub_p);
-    exists \$opts{$_} || return 0 for \@essential_parameter;
+    exists \$opts{\$_} || return 0 for \@essential_parameter;
     return 1;
 }
 BODY
