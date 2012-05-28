@@ -10,7 +10,7 @@ use Cwd;
 #
 
 our $AUTHOR = "Xiao'ou Zhang";
-our $VERSION = "0.1.0";
+our $VERSION = "0.3.0";
 
 use Getopt::Std;
 $Getopt::Std::STANDARD_HELP_VERSION = 1;
@@ -18,8 +18,8 @@ $Getopt::Std::STANDARD_HELP_VERSION = 1;
 # set essential messages
 sub HELP_MESSAGE {
     print <<HELP;
-Usage: autopm.pl -n <name> [-p <path>] [-v <version>] [-a <author>]
-                 [-f <function names>] [-i <internal function names>]
+Usage: autopm.pl -n <name> [-d <description>] [-p <path>] [-v <version>]
+       [-a <author>] [-f <function names>] [-i <internal function names>]
         -n Name of perl module
         -p Pathway of perl module
         -f Function names in perl module
@@ -43,8 +43,8 @@ VERSION
 }
 sub help {
     print <<SIMPLE_HELP;
-Usage: autopm.pl -n <name> [-p <path>] [-v <version>] [-a <author>]
-                 [-f <function names>] [-i <internal function names>]
+Usage: autopm.pl -n <name> [-d <description>] [-p <path>] [-v <version>]
+       [-a <author>] [-f <function names>] [-i <internal function names>]
 See 'autopm.pl --help' for more details.
 SIMPLE_HELP
     exit;
@@ -52,7 +52,7 @@ SIMPLE_HELP
 
 # get options and check
 my %opts;
-getopts('hn:p:v:a:f:i:', \%opts) or help();
+getopts('hn:d:p:v:a:f:i:', \%opts) or help();
 unless (%opts) { # no arguments, turn on interactive mode
     interactive();
 }
@@ -100,6 +100,9 @@ sub interactive {
         last if $opts{n} ne '';
         print "Module name can't be absent!\n"
     }
+    # input module description
+    print "Please input module description:\n";
+    chomp($opts{d} = <STDIN>);
     while (1) { # input module pathway
         print "Please input module pathway:\n";
         chomp($opts{p} = <STDIN>);
@@ -134,7 +137,7 @@ package $opts{n};
 
 #
 # Module Name: $opts{n}.pm
-# Function:
+# Function: $opts{d}
 #
 
 use strict;

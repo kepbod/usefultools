@@ -10,7 +10,7 @@ use Cwd;
 #
 
 our $AUTHOR = "Xiao'ou Zhang";
-our $VERSION = "0.1.0";
+our $VERSION = "0.4.0";
 
 use Getopt::Std;
 $Getopt::Std::STANDARD_HELP_VERSION = 1;
@@ -42,11 +42,12 @@ SIMPLE_HELP
 # get options and check
 my %opts;
 getopts('h', \%opts) or help();
+my $p_ref;
 if ($opts{h}) {
     help();
 }
 unless (%opts) {
-    interactive();
+    $p_ref = interactive();
 }
 
 # check and set version and author
@@ -61,7 +62,7 @@ $opts{a} = '' if not defined $opts{a}; # if no $ENV{USER}
 $opts{p} =~ s/([^\/]$)/$1\//;
 
 open my $f,">","$opts{p}$opts{n}.pl" or croak "Can't creat $opts{p}$opts{n}.pl!\n";
-writefile(); # write file
+writefile($p_ref); # write file
 close $f;
 
 ##########Subroutine##########
@@ -86,6 +87,9 @@ sub interactive {
         }
         print "Your pathway is wrong or no write permission!\n";
     }
+    # input description
+    print "Please input the description:\n";
+    chomp($opts{i} = <STDIN>);
     # input version
     print "Please input perl file version (e.g. X.X.X):\n";
     chomp($opts{v} = <STDIN>);
@@ -102,7 +106,7 @@ sub interactive {
     while (1) { # input optional arguments
         print "Please input perl file optional arguments without default values (e.g. ab:):\n";
         chomp($opts{o} = <STDIN>);
-        if ($opts{o} =~ /^([a-zA-Z]|[a-zA-Z]:)*$/) {
+        if ($opts{o} =~ /^([a-zA-Z]:?)*$/) {
             my $reduplicative_flag = 0;
             for (split //,$opts{o}) {
                 if ($_ ne ':' and exists $p{$_}) { # parameter reduplicative
@@ -118,7 +122,20 @@ sub interactive {
         }
         print "Your input format wrong!\n";
     }
-    $p{$_} = 1 for split //,$opts{o}; # record parameters
+    ($opts{p1}, $opts{p2}) = ('', '');
+    $opts{o} =~ s/([^:]$)/$1\$/;
+    for (split /:/,$opts{o}) {
+        if (length($_) > 1) {
+            $opts{p2} .= substr $_,-1,1,'';
+            $opts{p1} .= $_;
+        }
+        else {
+            $opts{p2} .= $_;
+        }
+    }
+    # record parameters
+    $p{$_} = 0 for split //,$opts{p1};
+    $p{$_} = 1 for split //,$opts{p2};
     while (1) { # input optional arguments
         print "Please input perl file optional arguments with default vlaues (e.g. a=>'zxo',b=>'abc'):\n";
         chomp($opts{d} = <STDIN>);
@@ -142,16 +159,32 @@ sub interactive {
                 print "Your arguments are reduplicative!\n";
                 next;
             }
+            else {
+                $p{$_} = 1 for map {/^(.)=>/; $1} split /,/,$opts{d};
+            }
             last;
         }
         print "Your input format wrong!\n";
     }
+    if (scalar keys %p) {
+        print "Please input the description for each parameter:\n";
+        for (keys %p) {
+            next if /:/;
+            next if $p{$_} == 0;
+            print "$_: ";
+            chomp($p{$_} = <STDIN>);
+        }
+    }
+    print "If you want the log and error file? (1: yes, 0: no)\n";
+    chomp($opts{l} = <STDIN>);
+    return \%p;
 }
 
 #
 # Function: Write file.
 #
 sub writefile {
+    my $p_ref = shift;
     # parameters with defaults
     my %default_p;
     for (split /,/,$opts{d}) {
@@ -166,26 +199,38 @@ sub writefile {
     $default .= "$_, " for (split /,/,$opts{d});
     # usage parameters
     my $usage_p = '';
-    $usage_p .= "-$_ <> " for (split /:/,$opts{e});
-    my ($p1, $p2, $o) = ('', '', $opts{o});
-    $o =~ s/([^:]$)/$1\$/;
-    for (split /:/,$o) {
-        if (length($_) > 1) {
-            $p2 .= substr $_,-1,1,'';
-            $p1 .= $_;
-        }
-        else {
-            $p2 .= $_;
-        }
+    $usage_p .= "-$_ <$p_ref->{$_}> " for (split /:/,$opts{e});
+    $usage_p .= "[-$opts{p1}] " if $opts{p1} ne '';
+    for (split //,$opts{p2}) {
+        $usage_p .= "[-$_ <$p_ref->{$_}>] " unless /\$/;
     }
-    $usage_p .= "[-$p1] " if $p1 ne '';
-    for (split //,$p2) {
-        $usage_p .= "[-$_ <>] " unless /\$/;
-    }
-    $usage_p .= "[-$_ <>] " for keys %default_p;
+    $usage_p .= "[-$_ <$p_ref->{$_}>] " for keys %default_p;
     # sub parameter
     my $sub_p = '';
     $sub_p .= "$_ " for (split /:/,$opts{e});
+    my ($log, $logend) = ('', '');
+    if ($opts{l}) {
+        $log = <<LOG;
+# set log and error file
+open STDOUT,'>',"log";
+open STDERR,'>',"error";
+
+# record command and starting time
+my \$command;
+while (my (\$key, \$value) = each %opts) {
+    \$command .= " -\$key \$value";
+}
+print "Command: \$0\$command\\n";
+print 'Program starts at ', scalar(localtime(time)), "\\n";
+LOG
+        $logend = <<LOGEND;
+# delete error file if no errors
+unlink "error" if -z "error";
+
+# record ending time
+print 'Program ends at ', scalar(localtime(time)), "\\n";
+LOGEND
+    }
     print $f <<HEADER;
 #!/usr/bin/perl
 use strict;
@@ -194,7 +239,7 @@ use Carp;
 
 #
 # Program Name: $opts{n}.pl
-# Function:
+# Function: $opts{i}
 #
 
 our \$AUTHOR = "$opts{a}";
@@ -212,7 +257,7 @@ HELP
 }
 sub VERSION_MESSAGE {
     print <<VERSION;
-$opts{n} -
+$opts{n} - $opts{i}
 Version: \$VERSION, Maintainer: \$AUTHOR
 VERSION
 }
@@ -229,6 +274,8 @@ my \%opts = ( $default);
 getopts('$p', \\\%opts) or help();
 help() if \$opts{h} or not exist_essential_parameter();
 
+$log
+$logend
 HEADER
     print $f <<BODY;
 ##########Subroutine##########

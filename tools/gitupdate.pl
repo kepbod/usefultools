@@ -9,7 +9,7 @@ use Carp;
 #
 
 our $AUTHOR = "Xiao'ou Zhang";
-our $VERSION = "0.1.0";
+our $VERSION = "0.3.0";
 
 use Getopt::Std;
 $Getopt::Std::STANDARD_HELP_VERSION = 1;
